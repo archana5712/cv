@@ -1,0 +1,151 @@
+HISTOGRAM 
+
+IDLE:
+
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+# Read the image
+img = cv2.imread(r'C:\Users\HP\OneDrive\Pictures\chris.jpg')
+
+# Check if image is read correctly
+if img is None:
+    print('Could not open or find the image:', img)
+    exit(0)
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Apply histogram equalization
+equ = cv2.equalizeHist(gray)
+
+# Stack the original and equalized images side-by-side
+res = np.hstack((gray, equ))
+
+# Calculate histogram and cumulative distribution function
+hist, bins = np.histogram(gray.flatten(), 256, [0, 256])
+cdf = hist.cumsum()
+cdf_normalized = cdf * hist.max() / cdf.max()
+
+# Create a single figure with two subplots
+plt.figure(figsize=(10, 12))
+
+# Plot the resultant image in the top subplot
+plt.subplot(2, 1, 1)
+plt.imshow(res, cmap='gray')
+plt.title('Original and Equalized Images')
+plt.axis('on')  # Show axis
+
+# Plot the histogram and CDF in the bottom subplot
+plt.subplot(2, 1, 2)
+plt.plot(cdf_normalized, color='b', label='CDF')
+plt.hist(gray.flatten(), 256, [0, 256], color='r', alpha=0.7, label='Histogram')
+plt.xlim([0, 256])
+plt.xlabel('Pixel Value')
+plt.ylabel('Frequency')
+plt.legend(loc='upper left')
+plt.title('Histogram and CDF')
+
+# Adjust layout to prevent overlap
+plt.tight_layout()
+plt.show()
+
+MATLAB:
+
+% Ensure OpenCV is set up and accessible in MATLAB
+
+% Read the image
+I = imread('C:\Users\HP\OneDrive\Pictures\chris.jpg');
+
+% Check if the image is read correctly
+if isempty(I)
+    error('Could not open or find the image.');
+end
+
+% Convert the image to grayscale
+gray = rgb2gray(I);
+
+% Apply histogram equalization using MATLAB's built-in function
+equ = histeq(gray);
+
+% Display the original and equalized images side by side using tiled layout
+tiledlayout(2, 2);
+
+% Display the original grayscale image
+nexttile;
+imshow(gray);
+title('Original Grayscale Image');
+
+% Display the histogram equalized image
+nexttile;
+imshow(equ);
+title('Histogram Equalized Image');
+
+% Calculate and plot histogram and CDF of the original grayscale image
+nexttile([1, 2]);
+histGray = imhist(gray);
+cdfGray = cumsum(histGray) / numel(gray);
+plot(0:255, cdfGray * max(histGray), 'b'); hold on;
+bar(0:255, histGray, 'r');
+xlim([0, 255]);
+legend('CDF', 'Histogram');
+title('Histogram and CDF of Original Image');
+hold off;
+
+% Display the final figure
+set(gcf, 'Position', get(0, 'Screensize')); % Maximize figure to screen size
+
+GOOGLE COLAB:
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+from google.colab import files
+uploaded = files.upload()
+
+# Read the image
+image_pat = next(iter(uploaded))
+image = cv2.imread(image_pat)
+
+# Check if the image is read correctly
+if image is None:
+    raise FileNotFoundError('Could not open or find the image.')
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Apply histogram equalization using OpenCV's built-in function
+equ = cv2.equalizeHist(gray)
+
+# Display the original and equalized images side by side using matplotlib
+plt.figure(figsize=(14, 7))
+
+# Display the original grayscale image
+plt.subplot(2, 2, 1)
+plt.imshow(gray, cmap='gray')
+plt.title('Original Grayscale Image')
+plt.axis('off')
+
+# Display the histogram equalized image
+plt.subplot(2, 2, 2)
+plt.imshow(equ, cmap='gray')
+plt.title('Histogram Equalized Image')
+plt.axis('off')
+
+# Calculate and plot histogram and CDF of the original grayscale image
+histGray, bins = np.histogram(gray.flatten(), 256, [0,256])
+cdfGray = histGray.cumsum()
+cdfGray_normalized = cdfGray * histGray.max() / cdfGray.max()
+
+plt.subplot(2, 1, 2)
+plt.plot(cdfGray_normalized, color='b')
+plt.hist(gray.flatten(), 256, [0,256], color='r', alpha=0.5)
+plt.xlim([0,256])
+plt.legend(('CDF','Histogram'), loc='upper left')
+plt.title('Histogram and CDF of Original Image')
+
+# Show the plots
+plt.tight_layout()
+plt.show()

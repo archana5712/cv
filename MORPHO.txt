@@ -1,0 +1,165 @@
+MORPHOLOGICAL 
+
+IDLE:
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read the image
+image_path = r'C:\Users\HP\OneDrive\Pictures\CR7.jpg'
+I = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)  # Load the image in grayscale
+
+# Display original image
+plt.subplot(2, 3, 1)
+plt.imshow(I, cmap='gray')
+plt.title('Original image')
+plt.axis('off')
+
+# Define structuring element for morphological operations
+se = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+
+# Dilated Image
+dilate = cv2.dilate(I, se, iterations=1)
+plt.subplot(2, 3, 2)
+plt.imshow(dilate, cmap='gray')
+plt.title('Dilated image')
+plt.axis('off')
+
+# Eroded Image
+erode = cv2.erode(I, se, iterations=1)
+plt.subplot(2, 3, 3)
+plt.imshow(erode, cmap='gray')
+plt.title('Eroded image')
+plt.axis('off')
+
+# Closed Image
+close = cv2.morphologyEx(I, cv2.MORPH_CLOSE, se)
+plt.subplot(2, 3, 4)
+plt.imshow(close, cmap='gray')
+plt.title('Closed image')
+plt.axis('off')
+
+# Opened Image
+open = cv2.morphologyEx(I, cv2.MORPH_OPEN, se)
+plt.subplot(2, 3, 5)
+plt.imshow(open, cmap='gray')
+plt.title('Opened image')
+plt.axis('off')
+
+# Morphological Gradient
+gradient = cv2.morphologyEx(I, cv2.MORPH_GRADIENT, se)
+plt.subplot(2, 3, 6)
+plt.imshow(gradient, cmap='gray')
+plt.title('Gradient image')
+plt.axis('off')
+
+# Display all images
+plt.show()
+
+MATLAB:
+
+% Read the image
+image_path = 'C:\Users\HP\OneDrive\Pictures\Chris.jpg';
+I = imread(image_path);
+
+% Convert image to grayscale
+I_gray = rgb2gray(I);
+
+% Display original image
+subplot(2, 3, 1);
+imshow(I_gray);
+title('Original image');
+
+% Define structuring element for morphological operations
+se = strel('rectangle', [7, 7]);
+
+% Dilated Image
+dilate = imdilate(I_gray, se);
+subplot(2, 3, 2);
+imshow(dilate);
+title('Dilated image');
+
+% Eroded Image
+erode = imerode(I_gray, se);
+subplot(2, 3, 3);
+imshow(erode);
+title('Eroded image');
+
+% Closed Image
+close = imclose(I_gray, se);
+subplot(2, 3, 4);
+imshow(close);
+title('Closed image');
+
+% Opened Image
+open = imopen(I_gray, se);
+subplot(2, 3, 5);
+imshow(open);
+title('Opened image');
+
+% Morphological Gradient
+gradient = imdilate(I_gray, se) - imerode(I_gray, se);
+subplot(2, 3, 6);
+imshow(gradient);
+title('Gradient image');
+
+% Adjust the figure to display all images
+set(gcf, 'Position', [100, 100, 1200, 600]);
+
+GOOGLE COLAB:
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+from google.colab import files
+uploaded = files.upload()
+
+image_path = next(iter(uploaded))
+image = cv2.imread(image_path)
+I_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Display original image
+plt.subplot(2, 3, 1)
+plt.imshow(I_gray, cmap='gray')
+plt.title('Original image')
+
+# Define structuring element for morphological operations
+se = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+
+# Dilated Image
+dilate = cv2.dilate(I_gray, se)
+plt.subplot(2, 3, 2)
+plt.imshow(dilate, cmap='gray')
+plt.title('Dilated image')
+
+# Eroded Image
+erode = cv2.erode(I_gray, se)
+plt.subplot(2, 3, 3)
+plt.imshow(erode, cmap='gray')
+plt.title('Eroded image')
+
+# Closed Image
+close = cv2.morphologyEx(I_gray, cv2.MORPH_CLOSE, se)
+plt.subplot(2, 3, 4)
+plt.imshow(close, cmap='gray')
+plt.title('Closed image')
+
+# Opened Image
+open_img = cv2.morphologyEx(I_gray, cv2.MORPH_OPEN, se)
+plt.subplot(2, 3, 5)
+plt.imshow(open_img, cmap='gray')
+plt.title('Opened image')
+
+# Morphological Gradient
+gradient = cv2.morphologyEx(I_gray, cv2.MORPH_GRADIENT, se)
+plt.subplot(2, 3, 6)
+plt.imshow(gradient, cmap='gray')
+plt.title('Gradient image')
+
+# Adjust the figure to display all images
+plt.gcf().set_size_inches(18, 10)
+plt.show()
+
+

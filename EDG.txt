@@ -1,0 +1,206 @@
+EDGE DETECTION:
+
+IDLE:
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Path to the image (update this to the correct path of your image)
+image_path = r'C:\Users\HP\OneDrive\Pictures\chris.jpg'
+
+# Read the image
+image = cv2.imread(image_path)
+
+# Convert to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Sobel Edge Detection
+sobel_x = cv2.Sobel(gray_image, cv2.CV_64F, 1, 0, ksize=5)
+sobel_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=5)
+sobel_edges = cv2.magnitude(sobel_x, sobel_y)
+
+# Prewitt Edge Detection (approximation using custom kernels)
+kernelx = np.array([[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
+kernely = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
+prewitt_edges = cv2.filter2D(gray_image, -1, kernelx) + cv2.filter2D(gray_image, -1, kernely)
+
+# Roberts Edge Detection (approximation using custom kernels)
+roberts_cross_v = np.array([[1, 0], [0, -1]])
+roberts_cross_h = np.array([[0, 1], [-1, 0]])
+roberts_edges = cv2.filter2D(gray_image, -1, roberts_cross_v) + cv2.filter2D(gray_image, -1, roberts_cross_h)
+
+# Laplacian of Gaussian (LoG) Edge Detection
+log_edges = cv2.Laplacian(cv2.GaussianBlur(gray_image, (3, 3), 0), cv2.CV_64F)
+
+# Zerocross Edge Detection using Laplacian
+laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
+zerocross_edges = np.zeros_like(laplacian)
+zerocross_edges[laplacian > 0] = 255
+zerocross_edges[laplacian < 0] = 0
+
+# Canny Edge Detection
+canny_edges = cv2.Canny(gray_image, 100, 200)
+
+# Plotting the results
+plt.figure(figsize=(20, 10))
+
+plt.subplot(2, 4, 1)
+plt.imshow(gray_image, cmap='gray')
+plt.title('Gray Scale Image')
+
+plt.subplot(2, 4, 2)
+plt.imshow(sobel_edges, cmap='gray')
+plt.title('Sobel')
+
+plt.subplot(2, 4, 3)
+plt.imshow(prewitt_edges, cmap='gray')
+plt.title('Prewitt')
+
+plt.subplot(2, 4, 4)
+plt.imshow(roberts_edges, cmap='gray')
+plt.title('Roberts')
+
+plt.subplot(2, 4, 5)
+plt.imshow(log_edges, cmap='gray')
+plt.title('LoG')
+
+plt.subplot(2, 4, 6)
+plt.imshow(zerocross_edges, cmap='gray')
+plt.title('Zerocross')
+
+plt.subplot(2, 4, 7)
+plt.imshow(canny_edges, cmap='gray')
+plt.title('Canny')
+
+plt.tight_layout()
+plt.show()
+
+MATLAB :
+
+% edge detection 
+I = rgb2gray(imread("C:\Users\HP\OneDrive\Pictures\Chris.jpg"));
+subplot(2, 4, 1), 
+imshow(I); 
+title("Gray Scale Image"); 
+
+% Sobel Edge Detection 
+J = edge(I, 'Sobel'); 
+subplot(2, 4, 2), 
+imshow(J); 
+title("Sobel"); 
+
+% Prewitt Edge Detection 
+K = edge(I, 'Prewitt'); 
+subplot(2, 4, 3), 
+imshow(K); 
+title("Prewitt"); 
+
+% Roberts Edge Detection 
+L = edge(I, 'Roberts'); 
+subplot(2, 4, 4), 
+imshow(L); 
+title("Roberts"); 
+
+% LoG Edge Detection 
+M = edge(I, 'log'); 
+subplot(2, 4, 5), 
+imshow(M); 
+title("LoG"); 
+
+% Zerocross Edge Detection 
+N = edge(I, 'zerocross'); 
+subplot(2, 4, 6), 
+imshow(N); 
+title("Zerocross"); 
+
+% Canny Edge Detection 
+O = edge(I, 'Canny'); 
+subplot(2, 4, 7), 
+imshow(O); 
+title("Canny");
+
+GOOGLE COLAB:
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+from google.colab import files
+uploaded = files.upload()
+
+image_path = next(iter(uploaded))
+image = cv2.imread(image_path)
+
+# Convert to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Sobel Edge Detection
+sobel_x = cv2.Sobel(gray_image, cv2.CV_64F, 1, 0, ksize=5)
+sobel_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=5)
+sobel_edges = cv2.magnitude(sobel_x, sobel_y)
+
+# Prewitt Edge Detection (approximation using custom kernels)
+kernelx = np.array([[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
+kernely = np.array([[1, 0, -1], [1, 0, -1], [1, 0, -1]])
+prewitt_edges = cv2.filter2D(gray_image, -1, kernelx) + cv2.filter2D(gray_image, -1, kernely)
+
+# Roberts Edge Detection (approximation using custom kernels)
+roberts_cross_v = np.array([[1, 0], [0, -1]])
+roberts_cross_h = np.array([[0, 1], [-1, 0]])
+roberts_edges = cv2.filter2D(gray_image, -1, roberts_cross_v) + cv2.filter2D(gray_image, -1, roberts_cross_h)
+
+# Laplacian of Gaussian (LoG) Edge Detection
+log_edges = cv2.Laplacian(cv2.GaussianBlur(gray_image, (3, 3), 0), cv2.CV_64F)
+
+# Zerocross Edge Detection using Laplacian
+laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
+zerocross_edges = np.zeros_like(laplacian)
+zerocross_edges[laplacian > 0] = 255
+zerocross_edges[laplacian < 0] = 0
+
+# Canny Edge Detection
+canny_edges = cv2.Canny(gray_image, 100, 200)
+
+# Plotting the results
+plt.figure(figsize=(20, 10))
+
+plt.subplot(2, 4, 1)
+plt.imshow(gray_image, cmap='gray')
+plt.title('Gray Scale Image')
+plt.axis('off')
+
+plt.subplot(2, 4, 2)
+plt.imshow(sobel_edges, cmap='gray')
+plt.title('Sobel')
+plt.axis('off')
+
+plt.subplot(2, 4, 3)
+plt.imshow(prewitt_edges, cmap='gray')
+plt.title('Prewitt')
+plt.axis('off')
+
+plt.subplot(2, 4, 4)
+plt.imshow(roberts_edges, cmap='gray')
+plt.title('Roberts')
+plt.axis('off')
+
+plt.subplot(2, 4, 5)
+plt.imshow(log_edges, cmap='gray')
+plt.title('LoG')
+plt.axis('off')
+
+plt.subplot(2, 4, 6)
+plt.imshow(zerocross_edges, cmap='gray')
+plt.title('Zerocross')
+plt.axis('off')
+
+plt.subplot(2, 4, 7)
+plt.imshow(canny_edges, cmap='gray')
+plt.title('Canny')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+ 
+
